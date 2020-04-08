@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="~/css/stylesheet.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script href="~/js/scriptfile.js"></script>
+
+    <title>@ViewBag.Title</title>
+</head>
+    <body>
+        <div class="container">
+            <nav>
+                <ul>
+                    <!--
+      <li> <a href="http://amenashahid.myweb.usf.edu/index.html">Home</a></li>
+      <li> <a href="http://amenashahid.myweb.usf.edu/checkyours.html">Check Yours</a></li>
+      <li> <a href="http://amenashahid.myweb.usf.edu/carratings.html">Top Cars</a></li>
+      <li> <a href="http://amenashahid.myweb.usf.edu/aboutus.html">About Us</a></li>
+      <li> <a href="http://amenashahid.myweb.usf.edu/contactus.html">Contact Us</a></li>
+
+    -->
+                    <li>@Html.ActionLink("Home","Index","Home")</li>
+                    <li>@Html.ActionLink("Check Yours", "checkyours", "Home")</li>
+                    <li>@Html.ActionLink("Top Cars", "carratings", "Home")</li>
+                    <li>@Html.ActionLink("About Us", "aboutus", "Home")</li>
+                    <li>@Html.ActionLink("Contact Us", "contactus", "Home")</li>
+                </ul>
+            </nav>
+        </div>
+        <div>@RenderBody()</div>
+    </body>
+</html>

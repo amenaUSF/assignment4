@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Check Yours";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="checkyours">
+    <!--setting up the search fields-->
+    <h1 class="container">Search For Your Cars Safety Rating Here</h1>
+    <div class="container"><i class="fas fa-search"></i></div>
+    <form>
+        <ul class="container">
+            <li><input type="number" id="inyear" placeholder="Choose a Year" min="1990" max="2022" /></li>
+            <li><input type="text" id="inmake" placeholder="Choose a Make" /></li>
+            <li><input type="text" id="inmodel" placeholder="Choose a Model" /><br /></li>
+        </ul>
+        <input class="submitsearch" type="button" onclick="carsearch()" value="Submit" />
+    </form>
+
+    <!--output display table "-->
+    <div style="overflow-x:auto;padding:0vw 4vw 0vw 4vw;">
+        <table class="searchtable">
+            <tr>
+                <th>Model Year</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Overall</th>
+                <th>Overall Front</th>
+                <th>Front Driver</th>
+                <th>Front Passenger</th>
+                <th>Overall Side</th>
+                <th>Side Driver</th>
+                <th>Side Passenger</th>
+                <th>Rollover</th>
+                <th>Rollover Possibility</th>
+                <th>Side Pole</th>
+                <th>Complaints</th>
+                <th>Recalls</th>
+            </tr>
+            <tbody id="displaytable">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--button for comments -->
+<div class="comments">
+    <i class="fas fa-comments" style="color:palegreen"></i>
+    <h6 style="margin-left:2vw">Comments & Suggestions</h6>
+    <!--designing function for a popup to add comments-->
+    <a class="commentbutton" onclick="popupfunction()">Comment</a>
+</div>
+
+<!-- pop up form for comments addition -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <i class="fas fa-comments" style="color:forestgreen; background:none; font-size:3vw;"></i>
+        <i class="fas fa-times-circle" onclick="popofffunction()" style="color:black; background:none; font-size:2vw; cursor:pointer; float:right"></i>
+        <input type="text" placeholder="Your Name" id="name" name="name" size=25 require />
+        <input type="email" placeholder="Your Email" id="email" name="email" required />
+        <textarea placeholder="Type Your Comments Here" id="UserComments" rows="7" cols="10" required></textarea>
+        <input type="button" onclick="addrow()" value="Submit" style="background-color:red; font-size:1.5vw; justify-content:center; color:white;"></>
+    </div>
+</div>
+
+<!--displaying the comments-->
+<div class="commentsdiv" style="overflow-x:auto;">
+    <table id="commenttable" class="commentstable">
+        <tr>
+            <th>UserName</th>
+            <th>Email</th>
+            <th>Comment</th>
+            <th style="background-color:black; color:black;">.....</th>
+        </tr>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+

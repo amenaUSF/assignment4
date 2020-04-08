@@ -1,0 +1,483 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    background-color: black;
+}
+
+.container {
+    width: 100vw;
+    height: 10px;
+    background-color: black;
+}
+
+
+.nav {
+    width: 100vw;
+    height: auto;
+    background-color: black;
+}
+
+/**setting up navigation bar */
+nav ul {
+    width: 100vw;
+    height: auto;
+    list-style-type: none;
+    overflow: hidden;
+    background-color: black;
+    position: fixed;
+}
+
+    nav ul li a {
+        display: inline-block;
+        border-radius: 5em;
+        text-align: center;
+        padding: 1vw 1vw 1vw 1vw;
+        margin: 1vw 0vw 1vw 0vw;
+        text-decoration: none;
+        float: left;
+        font-size: 1.25vw;
+        color: white;
+    }
+
+        nav ul li a:hover {
+            background-color: mediumseagreen;
+        }
+
+
+/**setting up the first slider */
+.slider {
+    width: 100vw;
+    height: 55vw;
+    background-image: url(../images/img/1.jpg);
+    background-size: cover;
+    display: flex;
+}
+
+    .slider .img1title {
+        width: 40vw;
+        height: 100%;
+        margin-left: 5vw;
+        margin-top: 40%;
+        background: none;
+    }
+
+        .slider .img1title h1 {
+            font-size: 2vw;
+            color: white;
+            line-height: 3vw;
+            background: none;
+        }
+
+            .slider .img1title h1 span {
+                color: red !important;
+                background: none;
+            }
+
+
+
+/**second slider for the main page*/
+.slider2 {
+    width: 100vw;
+    height: 55vw;
+    background-image: url(../images/img/2.jpg);
+    background-size: cover;
+    display: flex;
+}
+
+
+    .slider2 .img2title {
+        width: 35vw;
+        height: 100%;
+        margin-left: 30vw;
+        margin-top: 4vw;
+        background: none;
+    }
+
+        .slider2 .img2title h1 {
+            font-size: 3vw;
+            color: black;
+            line-height: 4vw;
+            text-align: center;
+            background: none;
+        }
+
+            .slider2 .img2title h1 span {
+                color: mediumseagreen !important;
+                background: none;
+            }
+
+
+/**third slider for the main page*/
+.slider3 {
+    width: 100vw;
+    height: 90vw;
+    background-image: url(../images/img/3.jpeg);
+    background-size: cover;
+    display: flex;
+}
+
+
+    .slider3 .img3title {
+        width: 35vw;
+        height: 100%;
+        margin-left: 8vw;
+        margin-top: 3vw;
+        background: none;
+    }
+
+        .slider3 .img3title h1 {
+            font-size: 3vw;
+            color: white;
+            line-height: 4vw;
+            text-align: center;
+            background: none;
+        }
+
+            .slider3 .img3title h1 span {
+                color: red !important;
+                background: none;
+            }
+
+        .slider3 .img3title h3 {
+            width: 40vw !important;
+            font-size: 3vw;
+            color: black;
+            line-height: 4vw;
+            background: none;
+        }
+/**About us Page for the website*/
+.aboutusheading {
+    width: 100vw;
+    height: 20vw;
+    background-color: black;
+    background-size: cover;
+    display: flex;
+}
+
+    .aboutusheading .heading1 {
+        width: 50vw;
+        height: 100%;
+        color: white;
+        margin-left: 25vw;
+        margin-top: 8vw;
+    }
+
+        .aboutusheading .heading1 h1 {
+            font-size: 3vw;
+            line-height: 4vw;
+            text-align: center;
+        }
+
+            .aboutusheading .heading1 h1 span {
+                color: mediumseagreen !important;
+            }
+
+/**motivation and mission statements*/
+.ourmotivation {
+    width: 100vw;
+    height: auto;
+    background-color: black;
+    background-size: cover;
+    display: flex;
+    margin-top: 3vw;
+}
+
+    .ourmotivation .heading1 {
+        width: 50vw;
+        height: 100%;
+        margin-left: 25vw;
+        margin-top: 0vw;
+    }
+
+        /**styling the headings*/
+        .ourmotivation .heading1 h1 {
+            font-size: 2vw;
+            border: dotted;
+            margin-bottom: 2vw;
+            color: mediumseagreen;
+            text-align: center !important;
+        }
+
+    /**styling the bullets*/
+    .ourmotivation .iconandtext {
+        width: 100%;
+        float: left;
+        color: mediumseagreen;
+        padding: 1vw 2vw 1vw 2vw;
+    }
+
+    .ourmotivation .icon {
+        float: left;
+        font-size: 2.5vw;
+        padding: 0vw 0.5vw;
+    }
+
+    .ourmotivation .iconandtext p {
+        color: white;
+        font-size: 1.5vw;
+        line-height: 1.6vw;
+        text-align: justify;
+    }
+
+/**styling the contact us page*/
+.about-the-group {
+    width: 100vw;
+    height: 30vw;
+    background-color: black;
+    display: flex;
+    border-color: white;
+    padding: 10vw 5vw 10vw 5vw;
+    color: white;
+    text-align: center;
+}
+
+    .about-the-group .heading h1 {
+        font-size: 2.5vw;
+        line-height: 2.5vw;
+        color: gainsboro;
+    }
+
+    .about-the-group p {
+        font-size: 1.25vw;
+        line-height: 1.75vw;
+        color: gainsboro;
+        padding: 2vw 0 2vw 0;
+    }
+
+    /**styling each group members profile*/
+
+    .about-the-group .col-1 {
+        float: left;
+        padding: 2vw;
+    }
+    /**styling the image*/
+
+    .about-the-group img {
+        float: left;
+        padding: 0vw 3vw;
+        width: 25%;
+        height: auto;
+    }
+    /**styling the Name heading*/
+    .about-the-group h2 {
+        font-size: 1.25vw;
+        line-height: 1.5vw;
+        color: gainsboro;
+        padding: 2vw 0vw 0vw 3vw;
+        text-align: start;
+    }
+
+    /**styling the about me description*/
+    .about-the-group .col-1 p {
+        font-size: 1.25vw;
+        line-height: 1.75vw;
+        color: gainsboro;
+        padding: 2vw 0 2vw 0;
+        text-align: left;
+    }
+    /**styling the links to github linkedin and phone their images*/
+    .about-the-group .col-1 a {
+        font-size: 2vw;
+        padding: 0vw 2vw;
+        float: left;
+    }
+
+
+/**styling the check yours page*/
+.checkyours {
+    width: 100%;
+}
+
+    .checkyours .container {
+        padding: 0vw 0vw 3vw 0vw;
+    }
+
+    .checkyours h1 {
+        margin: 8vw 0vw 3vw 0vw;
+        text-align: center;
+        color: white;
+        font-size: 3vw;
+    }
+
+    .checkyours i {
+        margin: 0vw 0vw 4vw 48vw;
+        color: palegreen;
+        position: center;
+        font-size: 4vw;
+    }
+
+    .checkyours form {
+        width: 100%;
+    }
+
+    .checkyours ul {
+        width: 36vw;
+        margin-left: 33vw;
+    }
+
+    .checkyours li {
+        list-style-type: none;
+        float: left;
+        padding: 4vw 2vw 0vw 0vw;
+    }
+
+        .checkyours li input {
+            width: 10vw;
+            height: 4vw;
+            font-size: 1vw;
+            text-align: center;
+            background-color: white;
+        }
+
+
+
+    /**styling of the submit button for submitting the search parameters*/
+    .checkyours .submitsearch {
+        background-color: mediumseagreen;
+        border: solid;
+        border-color: mediumseagreen;
+        border-radius: 1vw;
+        color: white;
+        width: 10vw;
+        height: 4vw;
+        margin: 3vw 45vw;
+        font-size: 2vw;
+        cursor: pointer;
+    }
+
+/**styling the searched results table*/
+.searchtable {
+    font-family: sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0vw 0vw 5vw 0vw;
+    font-size: 1vw;
+}
+
+    .searchtable td, .searchtable th {
+        border: 0.25vw solid black;
+        text-align: center !important;
+        padding: 0.25vw 0.25vw 0.25vw 0.25vw;
+        background-color: #ededed;
+    }
+
+    .searchtable th {
+        padding: 0.25vw 0vw 0.25vw 0;
+        text-align: left;
+        background-color: mediumseagreen;
+        color: white;
+    }
+
+/*Comments and suggestions*/
+.comments {
+    float: left;
+    height: auto;
+    margin: 0vw 0vw 0vw 3vw;
+    display: flex;
+    color: white;
+    font-size: 3vw;
+}
+
+.commentbutton {
+    background-color: limegreen;
+    border-radius: 1vw;
+    font-size: 1vw;
+    padding: 1vw 1vw 0vw 1vw;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    transform: translate(50vw,0vw);
+    cursor: pointer;
+}
+
+    .commentbutton:hover {
+        background-color: green;
+        color: white;
+        cursor: pointer;
+    }
+
+/**pop up form styling*/
+.popup {
+    background: rgba(0,0,0,0.6);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    height: auto;
+    width: 25%;
+    background: #f1ecec;
+    padding: 4vw;
+    border-radius: 2vw;
+    position: relative;
+}
+
+    .popup-content input {
+        width: 15vw;
+        height: 3vw;
+        background-color: white;
+        font-size: 1vw;
+        text-align: center;
+        border-radius: 2vw;
+        display: flex;
+        margin: 1vw 2vw 1vw 1vw;
+        border: 0.15vw solid black;
+    }
+
+    .popup-content textarea {
+        width: 15vw;
+        height: 8vw;
+        resize: none;
+        background-color: white;
+        font-size: 1vw;
+        text-align: center;
+        border-radius: 2vw;
+        display: flex;
+        margin: 1vw 2vw 1vw 1vw;
+        border: 0.15vw solid black;
+    }
+
+/**styling thecomments table*/
+.commentsdiv {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: none;
+    display: flex;
+}
+
+.commentstable {
+    height: auto;
+    width: 40%;
+    padding: 4vw;
+    position: relative;
+    font-family: sans-serif;
+    margin: 0vw 0vw 5vw 2vw;
+    font-size: 1vw;
+    background: none;
+}
+
+    .commentstable td, .commentstable th {
+        border: 0.25vw solid black;
+        background-color: white;
+        border-radius: 2vw;
+        text-align: center !important;
+        padding: 0.25vw 0.25vw 0.25vw 0.25vw;
+    }
+
+    .commentstable td {
+        width: 5vw;
+    }
+
+    .commentstable th {
+        padding: 0.25vw 0vw 0.25vw 0;
+        background-color: mediumseagreen;
+        color: white;
+    }

@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Top Cars";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<div class="checkyours">
+    <!--displaying the top 5 cars of the year here -->
+    <h1 class="container">The Top 5 Safe Cars for the Year</h1>
+    <div class="container" style="padding-bottom:6vw;"><a onclick="displaytop5()" style="cursor: pointer;"><i class="fas fa-trophy" style="color:gold; font-size:6vw; margin-left:46vw;"></i></a></div>
+    <p style="color:white; margin-left:46vw; padding-bottom:2vw; font-size:1vw;">click me to view</p>
+
+    <!--output display table-->
+    <div style="overflow-x:auto; padding:0vw 13vw 0vw 13vw;">
+        <table class="searchtable">
+            <tr>
+                <th>Model Year</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Overall</th>
+                <th>Overall Front</th>
+                <th>Overall Side</th>
+                <th>Rollover</th>
+                <th>Rollover Possibility</th>
+            </tr>
+            <tbody id="top5carsdisplay">
+            </tbody>
+        </table>
+    </div>
+</div>
