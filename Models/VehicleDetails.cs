@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace assignment4.Models
 {
@@ -15,7 +16,7 @@ namespace assignment4.Models
         [Key]
         public int year_id { get; set; }
         public int ModelYear { get; set; }
-        
+        public List<safetyratings> safetyrating { get; set; }
     }
 
     public class MakeResult
@@ -28,6 +29,7 @@ namespace assignment4.Models
         [Key]
         public int make_id { get; set; }
         public string Make { get; set; }
+        public List<safetyratings> safetyrating { get; set; }
     }
     public class ModelResult
     {
@@ -39,8 +41,8 @@ namespace assignment4.Models
         public string Make { get; set; }
         [Key]
         public int model_id { get; set; }
-
         public string Model { get; set; }
+        public List<safetyratings> safetyrating { get; set; }
     }
 
     public class VidResult
@@ -49,10 +51,10 @@ namespace assignment4.Models
     }
     public class v_id
     {
-        public string VehicleDescription { get; set; }
-        public int VehicleId { get; set; }
         [Key]
         public int veh_id { get; set; }
+        public string VehicleDescription { get; set; }
+        public int VehicleId { get; set; }
     }
     public class SafetyRatingsResult
     {
@@ -80,7 +82,18 @@ namespace assignment4.Models
         public string Make { get; set; }
         public string Model { get; set; }
         public string VehicleDescription { get; set; }
-              
+
+        //foreign keys for year model and make
+        [ForeignKey("years")]
+        public int year_id { get; set; }
+        public virtual v_year years { get; set; }
+        [ForeignKey("makes")]
+        public int make_id { get; set; }
+        public virtual v_make makes { get; set; }
+        [ForeignKey("models")]
+        public int model_id { get; set; }
+        public virtual v_model models { get; set; }
+
 
     }
 

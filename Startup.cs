@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 // This directive comes from the DataAccess directory
 // that stores the Context or the database
 using assignment4.data_access_folder;
-using assignment4.APIHandlerManager;
 
 namespace assignment4
 {

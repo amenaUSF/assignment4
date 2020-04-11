@@ -1,46 +1,113 @@
-﻿@{
+﻿@model SearchView
+@{
     ViewBag.Title = "Check Yours";
         Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<div class="checkyours">
-    <!--setting up the search fields-->
-    <h1 class="container">Search For Your Cars Safety Rating Here</h1>
-    <div class="container"><i class="fas fa-search"></i></div>
-    <form>
-        <ul class="container">
-            <li><input type="number" id="inyear" placeholder="Choose a Year" min="1990" max="2022" /></li>
-            <li><input type="text" id="inmake" placeholder="Choose a Make" /></li>
-            <li><input type="text" id="inmodel" placeholder="Choose a Model" /><br /></li>
-        </ul>
-        <input class="submitsearch" type="button" onclick="carsearch()" value="Submit" />
-    </form>
+    <div class="checkyours">
+        <!--setting up the search fields-->
+        <h1 class="container">Search For Your Cars Safety Rating Here</h1>
+        <div class="container"><i class="fas fa-search"></i></div>
+        <form asp-controller="Home" asp-action="checkyours">
+            <ul class="container">
+                <li>
+                    <select asp-for="yearsearch" asp-items="Model.Years">
+                        <option value="All Years">All Years</option>
+                    </select>
+                </li>
+                <li>
+                    <select asp-for="makesearch" asp-items="Model.Makes">
+                        <option value="All Makes">All Makes</option>
+                    </select>
+                </li>
+                <li>
+                    <select asp-for="modelsearch" asp-items="Model.Models">
+                        <option value="All Models">All Models</option>
+                    </select>
+                    <br />
+                </li>
+            </ul>
+            <input class="submitsearch" type="submit" value="Submit" />
+        </form>
 
-    <!--output display table "-->
-    <div style="overflow-x:auto;padding:0vw 4vw 0vw 4vw;">
-        <table class="searchtable">
-            <tr>
-                <th>Model Year</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Overall</th>
-                <th>Overall Front</th>
-                <th>Front Driver</th>
-                <th>Front Passenger</th>
-                <th>Overall Side</th>
-                <th>Side Driver</th>
-                <th>Side Passenger</th>
-                <th>Rollover</th>
-                <th>Rollover Possibility</th>
-                <th>Side Pole</th>
-                <th>Complaints</th>
-                <th>Recalls</th>
-            </tr>
-            <tbody id="displaytable">
-            </tbody>
-        </table>
+            <!--output display table "-->
+            <div style="overflow-x:auto;padding:0vw 4vw 0vw 4vw;">
+                <table class="searchtable">
+                    <tr>
+                        <th>Model Year</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Overall</th>
+                        <th>Overall Front</th>
+                        <th>Front Driver</th>
+                        <th>Front Passenger</th>
+                        <th>Overall Side</th>
+                        <th>Side Driver</th>
+                        <th>Side Passenger</th>
+                        <th>Rollover</th>
+                        <th>Rollover Possibility</th>
+                        <th>Side Pole</th>
+                        <th>Complaints</th>
+                        <th>Recalls</th>
+                    </tr>
+                    <tbody>
+                        @if (Model.safetyrating != null)
+                        {
+                            @foreach (var item in Model.safetyrating)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ModelYear)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Make)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Model)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OverallRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OverallFrontCrashRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FrontCrashDriversideRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FrontCrashPassengersideRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OverallSideCrashRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SideCrashDriversideRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SideCrashPassengersideRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RolloverRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RolloverPossibility)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SidePoleCrashRating)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ComplaintsCount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RecallsCount)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
     </div>
-</div>
 
 <!--button for comments -->
 <div class="comments">
