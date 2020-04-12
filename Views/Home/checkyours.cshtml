@@ -147,8 +147,8 @@
         <form asp-controller="Home" asp-action="AddComment" style="background-color:#f1ecec">
             <div asp-validation-summary="All"></div>
             <input type="hidden" asp-for="Id"/>
-            <input placeholder="Your Name Required" asp-for="name" style="text-align:center;" />
-            <input type=email placeholder="Your Email xyz@abc.com" asp-for="email" style="text-align:center;"/>
+            <input placeholder="Your Name Required" asp-for="name" style="text-align:center;" required/>
+            <input type=email placeholder="Your Email xyz@abc.com" asp-for="email" style="text-align:center;" required"/>
             <textarea placeholder="Add/Edit Your Comments Here" asp-for="comments" rows="7" cols="10" required></textarea>
             <input type="submit" value="Submit" style="background-color:red; font-size:1.5vw; justify-content:center; color:white;"></>
         </form>
