@@ -21,6 +21,7 @@ namespace assignment4.data_access_folder
         public DbSet<vehicle_years> Vehicle_Years { get; set; }
         public DbSet<vehicle_makes> Vehicle_Makes { get; set; }
         public DbSet<vehicle_models> Vehicle_Models { get; set; }
+        public DbSet<vehicle_variants> Vehicle_Variants{ get; set; }
         public DbSet<vehicle_safetyratings> Vehicle_Safetyratings{ get; set; }
         public DbSet<usercomments> UserReviews { get; set; }
 

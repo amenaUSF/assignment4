@@ -29,6 +29,7 @@ namespace assignment4.Models
 
     public class safetyratingsview
     {
+        public int VehicleId { get; set; }
         public string OverallRating { get; set; }
         public string OverallFrontCrashRating { get; set; }
         public string FrontCrashDriversideRating { get; set; }

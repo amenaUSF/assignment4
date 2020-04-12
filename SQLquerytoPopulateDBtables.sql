@@ -1,6 +1,7 @@
 ﻿delete from dbo.Vehicle_Years;
 delete from dbo.Vehicle_Makes;
 delete from dbo.Vehicle_Models;
+delete from dbo.Vehicle_Variants;
 delete from dbo.Vehicle_Safetyratings;
 
 
@@ -23,6 +24,21 @@ Distinct Model
 from dbo.models where Model not in (select Model from dbo.Vehicle_Models);
 ;
 
+insert into dbo.Vehicle_Variants
+select 
+VehicleId,
+y.year_id,
+m.make_id,
+md.model_id
+from dbo.safety s
+left join dbo.Vehicle_Years y
+on s.ModelYear=y.ModelYear
+left join dbo.Vehicle_Makes m
+on s.Make=m.Make
+left join dbo.Vehicle_Models md
+on s.Model=md.Model
+where vehicleid not in (select vehicleid from dbo.Vehicle_Safetyratings);
+
 insert into dbo.Vehicle_Safetyratings
 select 
 VehicleId,
@@ -38,16 +54,7 @@ RolloverRating,
 RolloverPossibility,
 SidePoleCrashRating,
 ComplaintsCount,
-RecallsCount,
-y.year_id,
-m.make_id,
-md.model_id
+RecallsCount
 from dbo.safety s
-left join dbo.Vehicle_Years y
-on s.ModelYear=y.ModelYear
-left join dbo.Vehicle_Makes m
-on s.Make=m.Make
-left join dbo.Vehicle_Models md
-on s.Model=md.Model
 where vehicleid not in (select vehicleid from dbo.Vehicle_Safetyratings);
 

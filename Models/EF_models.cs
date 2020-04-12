@@ -22,7 +22,7 @@ namespace assignment4.Models
         [Key]
         public int year_id { get; set; }
         public int ModelYear { get; set; }
-        List<safetyratings> safetyrating { get; set; }
+        List<vehicle_variants> allvariants { get; set; }
 
     }
     public class vehicle_makes
@@ -30,14 +30,14 @@ namespace assignment4.Models
         [Key]
         public int make_id { get; set; }
         public string Make { get; set; }
-        List<safetyratings> safetyrating { get; set; }
+        List<vehicle_variants> allvariants { get; set; }
     }
     public class vehicle_models
     {
         [Key]
         public int model_id { get; set; }
         public string Model { get; set; }
-        List<safetyratings> safetyrating { get; set; }
+        List<vehicle_variants> allvariants { get; set; }
     }
     public class vehicle_safetyratings
     {
@@ -56,6 +56,12 @@ namespace assignment4.Models
         public string SidePoleCrashRating { get; set; }
         public string ComplaintsCount { get; set; }
         public string RecallsCount { get; set; }
+       
+    }
+
+    public class vehicle_variants {
+        [Key]
+        public int VehicleId { get; set; }
         //foreign keys for year model and make
         [ForeignKey("years")]
         public int year_id { get; set; }
@@ -66,7 +72,6 @@ namespace assignment4.Models
         [ForeignKey("models")]
         public int model_id { get; set; }
         public virtual vehicle_models models { get; set; }
-
 
     }
 

@@ -300,7 +300,7 @@ namespace assignment4.Controllers
 
         }//end of get_vids() function to return all the vehicle ids for a spefic year, make and model
 
-        /*action to populate the safety ratings DB*/
+        /*action to populate the safety DB connected with API*/
         public IActionResult PopulateSR()
         {
             // Retrieve the years that were saved in the symbols method
@@ -410,27 +410,62 @@ namespace assignment4.Controllers
         {
             return View();
         }
+        [HttpGet]
         public IActionResult carratings()
         {
-            IQueryable<usercommentdetails> viewcommentdetails;
-
-            viewcommentdetails = from d in dbContext.UserReviews
-                                 select new usercommentdetails
-                                 {
-                                     Id = d.Id,
-                                     name = d.name,
-                                     email = d.email,
-                                     comments = d.comments
-
-                                 };
+            IQueryable<safetyratingsview> topcars=null;
             SearchView viewmodel = new SearchView
             {
-                commentdetails = viewcommentdetails
+                safetyrating = topcars
+            };
+            return View(viewmodel);
+        }
+
+        [HttpPost]
+        public IActionResult carratings(int x)
+        {
+            IQueryable<safetyratingsview> topcars ;
+
+            topcars =( from d in dbContext.Vehicle_Safetyratings
+                                join v in dbContext.Vehicle_Variants on d.VehicleId equals v.VehicleId
+                                join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
+                                join m in dbContext.Vehicle_Models on v.model_id equals m.model_id
+                                join md in dbContext.Vehicle_Makes on v.make_id equals md.make_id
+                                where y.ModelYear==2021 && d.OverallRating!="Not Rated" && d.OverallSideCrashRating!="Not Rated" && d.OverallFrontCrashRating!="Not Rated" 
+                               select new safetyratingsview {
+                                   VehicleId=d.VehicleId,
+                                   OverallRating = d.OverallRating,
+                                   OverallFrontCrashRating = d.OverallFrontCrashRating,
+                                   FrontCrashDriversideRating = d.FrontCrashDriversideRating,
+                                   FrontCrashPassengersideRating = d.FrontCrashPassengersideRating,
+                                   OverallSideCrashRating = d.OverallSideCrashRating,
+                                   SideCrashDriversideRating = d.SideCrashDriversideRating,
+                                   SideCrashPassengersideRating = d.SideCrashPassengersideRating,
+                                   RolloverRating = d.RolloverRating,
+                                   RolloverPossibility = d.RolloverPossibility,
+                                   SidePoleCrashRating = d.SidePoleCrashRating,
+                                   ComplaintsCount = d.ComplaintsCount,
+                                   RecallsCount = d.RecallsCount,
+                                   ModelYear = y.ModelYear,
+                                   Make = md.Make,
+                                   Model = m.Model,
+                                   VehicleDescription = d.VehicleDescription
+                               })
+                               .OrderByDescending(c => c.OverallRating)
+                               .ThenBy(c => c.RolloverPossibility)
+                               .ThenBy(c => c.ComplaintsCount)
+                               .ThenBy(c => c.RecallsCount)
+                               .Take(5);
+
+
+            SearchView viewmodel = new SearchView
+            {
+                safetyrating = topcars
             };
             return View(viewmodel);
         }
         [HttpGet]
-        public IActionResult checkyours()
+        public IActionResult checkyours(int id)
         {
             //to get a list of all available options
             IEnumerable<int> yearsquery = from m in dbContext.Vehicle_Years
@@ -443,8 +478,37 @@ namespace assignment4.Controllers
             IQueryable<string> modelsquery = from m in dbContext.Vehicle_Models
                                             orderby m.Model
                                             select m.Model;
-            //send as blank at get
+            //send as blank at get 
             IQueryable<safetyratingsview> view_safetyrating=null;
+            //load data in it if its master detail relationship coming from topratings
+            if (id != 0)
+            {
+                view_safetyrating = from d in dbContext.Vehicle_Safetyratings
+                                    join v in dbContext.Vehicle_Variants on d.VehicleId equals v.VehicleId
+                                    join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
+                                    join m in dbContext.Vehicle_Models on v.model_id equals m.model_id
+                                    join md in dbContext.Vehicle_Makes on v.make_id equals md.make_id
+                                    where d.VehicleId == id
+                                    select new safetyratingsview
+                                    {
+                                        OverallRating = d.OverallRating,
+                                        OverallFrontCrashRating = d.OverallFrontCrashRating,
+                                        FrontCrashDriversideRating = d.FrontCrashDriversideRating,
+                                        FrontCrashPassengersideRating = d.FrontCrashPassengersideRating,
+                                        OverallSideCrashRating = d.OverallSideCrashRating,
+                                        SideCrashDriversideRating = d.SideCrashDriversideRating,
+                                        SideCrashPassengersideRating = d.SideCrashPassengersideRating,
+                                        RolloverRating = d.RolloverRating,
+                                        RolloverPossibility = d.RolloverPossibility,
+                                        SidePoleCrashRating = d.SidePoleCrashRating,
+                                        ComplaintsCount = d.ComplaintsCount,
+                                        RecallsCount = d.RecallsCount,
+                                        ModelYear = y.ModelYear,
+                                        Make = md.Make,
+                                        Model = m.Model,
+                                        VehicleDescription = d.VehicleDescription
+                                    };
+            }
             //to load comments on the page
             IQueryable<usercommentdetails> viewcommentdetails;
 
@@ -510,14 +574,24 @@ namespace assignment4.Controllers
                            where m.Model == modelsearch
                            select m;
             }
+            //filtered vehicle variants
+            var f_variants = from d in dbContext.Vehicle_Variants
+                             join c in f_years on d.year_id equals c.year_id
+                             join e in f_makes on d.make_id equals e.make_id
+                             join f in f_models on d.model_id equals f.model_id
+                             select new v_variants
+                             {
+                                 VehicleId=d.VehicleId,
+                                 ModelYear = c.ModelYear,
+                                 Make = e.Make,
+                                 Model = f.Model
+                                 };
 
-
-            //filter on year,make and model (1 - many relationship)
+            //filter on year,make and model 
+            //details on the asked for vehicle variants (1 - many relationship)
 
             view_safetyrating = from d in dbContext.Vehicle_Safetyratings
-                                join c in f_years on d.year_id equals c.year_id
-                                join e in f_makes on d.make_id equals e.make_id
-                                join f in f_models on d.model_id equals f.model_id
+                                join c in f_variants on d.VehicleId equals c.VehicleId
                                 select new safetyratingsview
                                 {
                                     OverallRating = d.OverallRating,
@@ -533,8 +607,8 @@ namespace assignment4.Controllers
                                     ComplaintsCount = d.ComplaintsCount,
                                     RecallsCount = d.RecallsCount,
                                     ModelYear = c.ModelYear,
-                                    Make = e.Make,
-                                    Model = f.Model,
+                                    Make = c.Make,
+                                    Model = c.Model,
                                     VehicleDescription = d.VehicleDescription
                                 };
 
