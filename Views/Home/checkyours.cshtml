@@ -112,7 +112,7 @@
 
 <script>
     /*function to show hide the popup*/
-    function popupfunction(id,name,email) {
+    function popupfunction(id,name,email,comments) {
         if (id == null) {
             document.querySelector(".popup").style.display = "flex";
         }
@@ -121,6 +121,8 @@
             document.getElementById("name").value = name;
             document.getElementById("email").value = email;
             document.getElementById("Id").value = id;
+            document.getElementById("comments").value = comments;
+
         }
     }
     function popofffunction() {
@@ -145,8 +147,8 @@
         <form asp-controller="Home" asp-action="AddComment" style="background-color:#f1ecec">
             <div asp-validation-summary="All"></div>
             <input type="hidden" asp-for="Id"/>
-            <input placeholder="Your Name Required" asp-for="name" style="text-align:center" />
-            <input placeholder="Your Email xyz@abc.com" asp-for="email" style="text-align:center"/>
+            <input placeholder="Your Name Required" asp-for="name" style="text-align:center;" />
+            <input type=email placeholder="Your Email xyz@abc.com" asp-for="email" style="text-align:center;"/>
             <textarea placeholder="Add/Edit Your Comments Here" asp-for="comments" rows="7" cols="10" required></textarea>
             <input type="submit" value="Submit" style="background-color:red; font-size:1.5vw; justify-content:center; color:white;"></>
         </form>
@@ -157,10 +159,10 @@
     <div class="commentsdiv" style="overflow-x:auto;">
         <table id="commenttable" class="commentstable">
             <tr>
-                <th>UserName</th>
-                <th>Email</th>
-                <th>Comment</th>
-                <th style="background-color:black; color:black;">.....</th>
+                <th style="width:15%">UserName</th>
+                <th style="width:20%">Email</th>
+                <th style="width:60%">Comment</th>
+                <th style="width:5%; background-color:black; color:black;">.....</th>
             </tr>
             <tbody>
                 @if (Model.commentdetails != null)
@@ -178,7 +180,7 @@
                                 @Html.DisplayFor(modelItem => item.comments)
                             </td>
                             <td>
-                                <a onclick="popupfunction('@item.Id','@item.name','@item.email')"  style="cursor: pointer;"> <i class="fas fa-edit" style="color:cornflowerblue; background:white; font-size:1vw;"></i></a>  
+                                <a onclick="popupfunction('@item.Id','@item.name','@item.email','@item.comments')"  style="cursor: pointer;"> <i class="fas fa-edit" style="color:cornflowerblue; background:white; font-size:1vw;"></i></a>  
                                 <a href="@Url.Action("DeleteComment",new { id=item.Id})" style="cursor: pointer;"> <i class="fas fa-trash" style="color:red; background:white; font-size:1vw;"></i></a>
                             </td>
                         </tr>
