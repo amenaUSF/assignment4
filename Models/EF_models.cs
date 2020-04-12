@@ -7,6 +7,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace assignment4.Models
 {
+    public class usercomments
+    {
+        [Key]
+        public int Id { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string comments { get; set; }
+
+    }
+
     public class vehicle_years
     {
         [Key]
@@ -59,5 +69,6 @@ namespace assignment4.Models
 
 
     }
+
 
 }

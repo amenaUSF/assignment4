@@ -412,7 +412,22 @@ namespace assignment4.Controllers
         }
         public IActionResult carratings()
         {
-            return View();
+            IQueryable<usercommentdetails> viewcommentdetails;
+
+            viewcommentdetails = from d in dbContext.UserReviews
+                                 select new usercommentdetails
+                                 {
+                                     Id = d.Id,
+                                     name = d.name,
+                                     email = d.email,
+                                     comments = d.comments
+
+                                 };
+            SearchView viewmodel = new SearchView
+            {
+                commentdetails = viewcommentdetails
+            };
+            return View(viewmodel);
         }
         [HttpGet]
         public IActionResult checkyours()
@@ -428,25 +443,37 @@ namespace assignment4.Controllers
             IQueryable<string> modelsquery = from m in dbContext.Vehicle_Models
                                             orderby m.Model
                                             select m.Model;
-//send as blank at get
+            //send as blank at get
             IQueryable<safetyratingsview> view_safetyrating=null;
+            //to load comments on the page
+            IQueryable<usercommentdetails> viewcommentdetails;
 
-            SearchView viewmodel = new SearchView {
+            viewcommentdetails = from d in dbContext.UserReviews
+                                 select new usercommentdetails
+                                 {
+                                     Id=d.Id,
+                                     name = d.name,
+                                     email = d.email,
+                                     comments = d.comments
+                                 };
+            SearchView viewmodel = new SearchView
+            {
                 Years = new SelectList(yearsquery.ToList()),
                 Makes = new SelectList(makesquery.ToList()),
                 Models = new SelectList(modelsquery.ToList()),
-                safetyrating = view_safetyrating
+
+                safetyrating = view_safetyrating,
+                commentdetails = viewcommentdetails
             };
             return View(viewmodel);
         }
 
         [HttpPost]
-        public IActionResult checkyours(string yearsearch, string makesearch, string modelsearch)
+        public IActionResult checkyours(string yearsearch, string makesearch, string modelsearch,string name, string email, string comments)
         {
             IEnumerable<int> yearsquery = from m in dbContext.Vehicle_Years
                                           orderby m.ModelYear
-                                          select m.ModelYear
-                               ;
+                                          select m.ModelYear;
             IQueryable<string> makesquery = from m in dbContext.Vehicle_Makes
                                             orderby m.Make
                                             select m.Make;
@@ -511,22 +538,85 @@ namespace assignment4.Controllers
                                     VehicleDescription = d.VehicleDescription
                                 };
 
+            //to load comments on the page
+            IQueryable<usercommentdetails> viewcommentdetails;
 
+            viewcommentdetails = from d in dbContext.UserReviews
+                                 select new usercommentdetails
+                                 {
+                                     Id = d.Id,
+                                 name = d.name,
+                                 email = d.email,
+                                 comments = d.comments
+
+                             };
             SearchView viewmodel = new SearchView
             {
                 Years = new SelectList(yearsquery.ToList()),
                 Makes = new SelectList(makesquery.ToList()),
                 Models = new SelectList(modelsquery.ToList()),
 
-                safetyrating = view_safetyrating
+                safetyrating = view_safetyrating,
+                commentdetails=viewcommentdetails
             };
             return View(viewmodel);
         }
 
-        public IActionResult carsearch(int year, string make, string model)
+
+        public void PopulateComments(string name, string email, string comments)
         {
-            Console.WriteLine("in the car search");
-            return View("carratings");
+            usercomments ucd = new usercomments
+            {
+                name = name,
+                email = email,
+                comments = comments
+            };
+
+            //Database will give PK constraint violation error when trying to insert.                //So add vehicle ids only if it doesnt exist, check existence using years present inside already
+            if (ucd != null)
+            {
+                if (dbContext.UserReviews.Where(c => c.name.Equals(ucd.name) && c.email.Equals(ucd.email) && c.comments.Equals(ucd.comments)).Count() == 0)
+                {
+                    dbContext.UserReviews.Add(ucd);
+                }
+            }
+
+            dbContext.SaveChanges();
+            ViewBag.dbSuccessComp = 1;
+        }
+        //Create for CRUD
+        public ActionResult AddComment(string name, string email, string comments,int id)
+        {
+            if (id == 0)
+            {
+                PopulateComments(name, email, comments);
+            }
+            else
+            {
+                UpdateComment(name, email, comments, id);
+            }
+            return RedirectToAction("checkyours","Home");
+        }
+
+        //Updatefor CRUD
+        public ActionResult UpdateComment(string name, string email, string comments, int id)
+        {
+            var updatethis = dbContext.UserReviews
+                .Where(x => x.Id == id).First();
+            updatethis.name = name;
+            updatethis.email = email;
+            updatethis.comments = comments;
+            dbContext.SaveChanges();
+            return RedirectToAction("checkyours", "Home");
+        }
+        //Delete for CRUD
+        public ActionResult DeleteComment(int id)
+        {
+            var deletethis = dbContext.UserReviews
+                .Where(x => x.Id == id).First();
+            dbContext.UserReviews.Remove(deletethis);
+            dbContext.SaveChanges();
+            return RedirectToAction("checkyours", "Home");
         }
         public IActionResult contactus()
         {

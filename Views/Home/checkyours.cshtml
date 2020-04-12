@@ -3,6 +3,7 @@
     ViewBag.Title = "Check Yours";
         Layout = "~/Views/Shared/_Layout.cshtml";
 
+
 }
     <div class="checkyours">
         <!--setting up the search fields-->
@@ -109,6 +110,25 @@
             </div>
     </div>
 
+<script>
+    /*function to show hide the popup*/
+    function popupfunction(id,name,email) {
+        if (id == null) {
+            document.querySelector(".popup").style.display = "flex";
+        }
+        else {
+            document.querySelector(".popup").style.display = "flex";
+            document.getElementById("name").value = name;
+            document.getElementById("email").value = email;
+            document.getElementById("Id").value = id;
+        }
+    }
+    function popofffunction() {
+        document.querySelector(".popup").style.display = "none";
+    }
+
+</script>
+
 <!--button for comments -->
 <div class="comments">
     <i class="fas fa-comments" style="color:palegreen"></i>
@@ -122,26 +142,51 @@
     <div class="popup-content">
         <i class="fas fa-comments" style="color:forestgreen; background:none; font-size:3vw;"></i>
         <i class="fas fa-times-circle" onclick="popofffunction()" style="color:black; background:none; font-size:2vw; cursor:pointer; float:right"></i>
-        <input type="text" placeholder="Your Name" id="name" name="name" size=25 require />
-        <input type="email" placeholder="Your Email" id="email" name="email" required />
-        <textarea placeholder="Type Your Comments Here" id="UserComments" rows="7" cols="10" required></textarea>
-        <input type="button" onclick="addrow()" value="Submit" style="background-color:red; font-size:1.5vw; justify-content:center; color:white;"></>
+        <form asp-controller="Home" asp-action="AddComment" style="background-color:#f1ecec">
+            <div asp-validation-summary="All"></div>
+            <input type="hidden" asp-for="Id"/>
+            <input placeholder="Your Name Required" asp-for="name" style="text-align:center" />
+            <input placeholder="Your Email xyz@abc.com" asp-for="email" style="text-align:center"/>
+            <textarea placeholder="Add/Edit Your Comments Here" asp-for="comments" rows="7" cols="10" required></textarea>
+            <input type="submit" value="Submit" style="background-color:red; font-size:1.5vw; justify-content:center; color:white;"></>
+        </form>
     </div>
 </div>
 
-<!--displaying the comments-->
-<div class="commentsdiv" style="overflow-x:auto;">
-    <table id="commenttable" class="commentstable">
-        <tr>
-            <th>UserName</th>
-            <th>Email</th>
-            <th>Comment</th>
-            <th style="background-color:black; color:black;">.....</th>
-        </tr>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+    <!--displaying the comments-->
+    <div class="commentsdiv" style="overflow-x:auto;">
+        <table id="commenttable" class="commentstable">
+            <tr>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>Comment</th>
+                <th style="background-color:black; color:black;">.....</th>
+            </tr>
+            <tbody>
+                @if (Model.commentdetails != null)
+                {
+                    @foreach (var item in Model.commentdetails)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.comments)
+                            </td>
+                            <td>
+                                <a onclick="popupfunction('@item.Id','@item.name','@item.email')"  style="cursor: pointer;"> <i class="fas fa-edit" style="color:cornflowerblue; background:white; font-size:1vw;"></i></a>  
+                                <a href="@Url.Action("DeleteComment",new { id=item.Id})" style="cursor: pointer;"> <i class="fas fa-trash" style="color:red; background:white; font-size:1vw;"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 
 
 

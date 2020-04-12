@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using assignment4.Models;
@@ -19,6 +20,11 @@ namespace assignment4.Models
         public string modelsearch { get; set; }
         //final model with complete vehicle info 
         public IQueryable<safetyratingsview> safetyrating { get; set; }
+        public int Id { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string comments { get; set; }
+        public IQueryable<usercommentdetails> commentdetails { get; set; }
     }
 
     public class safetyratingsview
@@ -39,6 +45,16 @@ namespace assignment4.Models
         public string Make { get; set; }
         public string Model { get; set; }
         public string VehicleDescription { get; set; }
+    }
+    public class usercommentdetails {
+        public int Id;
+        [Required(ErrorMessage = "Please enter your name")]
+        public string name;
+        [Required(ErrorMessage = "Please enter your email address")]
+        [RegularExpression(".+\\@.+\\..+",ErrorMessage = "Please enter a valid email address")]
+        public string email;
+        [Required(ErrorMessage = "Please comment something")]
+        public string comments;
     }
 
 }
