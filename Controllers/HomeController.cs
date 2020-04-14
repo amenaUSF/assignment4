@@ -47,7 +47,7 @@ namespace assignment4.Controllers
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(
-            new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 string PATH = BASE_URL;
                 string data = "";
                 List<v_year> years = null;
@@ -62,11 +62,8 @@ namespace assignment4.Controllers
                     {
                         years = JsonConvert.DeserializeObject<YearResult>(data).Results;
                     }
-
                 }
-
                 return years;
-
             }
         }//end of get_vyears() function to return all the years
 
@@ -76,7 +73,6 @@ namespace assignment4.Controllers
             // Retrieve the years that were saved in the symbols method
             List<v_year> years = JsonConvert.DeserializeObject<List<v_year>>(TempData["years"].ToString());
             //List<v_year> years = JsonConvert.DeserializeObject<List<v_year>>(tem.ToString());
-
             foreach (v_year v_year in years)
             {
                 //Database will give PK constraint violation error when trying to insert.                //So add years only if it doesnt exist, check existence using years present inside already
@@ -85,7 +81,6 @@ namespace assignment4.Controllers
                     dbContext.years.Add(v_year);
                 }
             }
-
             dbContext.SaveChanges();
             ViewBag.dbSuccessComp = 1;
             return View("Index");

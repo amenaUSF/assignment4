@@ -116,6 +116,8 @@
     function popupfunction(id, name, email, comments) {
         if (id == null) {
             document.querySelector(".popup").style.display = "flex";
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
         else {
             document.querySelector(".popup").style.display = "flex";
@@ -123,6 +125,8 @@
             document.getElementById("email").value = email;
             document.getElementById("Id").value = id;
             document.getElementById("comments").value = comments;
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
 
         }
     }
