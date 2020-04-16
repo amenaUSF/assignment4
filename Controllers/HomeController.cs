@@ -332,7 +332,7 @@ namespace assignment4.Controllers
         //loading data from API into our local database
         public void PopulatetheDBfromAPI()
         {
-            /*
+            
             //Set ViewBag variable first to transfer data to DB eventually
             ViewBag.dbSuccessComp = 0;
 
@@ -364,7 +364,7 @@ namespace assignment4.Controllers
                 TempData["models"] = JsonConvert.SerializeObject(models);
                 PopulateModel();
             }
-
+           
             //to get vehicle ids (variants) available for each of the years, makes and models combo in the models table
             ViewBag.dbSuccessComp = 0;
             List<v_model> models2 = dbContext.models.ToList();
@@ -378,37 +378,40 @@ namespace assignment4.Controllers
                     PopulateId();
                 }
             }
-            */
-            //to get safety ratings for each of the vehicle variants in the ids (v_ids) table
-/*            ViewBag.dbSuccessComp = 0;
-            List<v_id> vids2 = dbContext.ids.ToList();
-            foreach (v_id v_id in vids2)
-            {
-                List<safetyratings> safety = GetV_safetyrating(v_id.VehicleId.ToString());
-                TempData["safety"] = JsonConvert.SerializeObject(safety);
-                PopulateSR();
-            }
             
-    */
+            
+            //to get safety ratings for each of the vehicle variants in the ids (v_ids) table
+                        ViewBag.dbSuccessComp = 0;
+                        List<v_id> vids2 = dbContext.ids.ToList();
+                        foreach (v_id v_id in vids2)
+                        {
+                            List<safetyratings> safety = GetV_safetyrating(v_id.VehicleId.ToString());
+                            TempData["safety"] = JsonConvert.SerializeObject(safety);
+                            PopulateSR();
+                        }
+
+
         }
 
 
         public IActionResult Index()
-          {
+        {
             //this populates the DB from the API (will run just one time to store data from API (in sequential steps) since we have to hit our API alot sequentially
-            PopulatetheDBfromAPI();  
+        //    PopulatetheDBfromAPI();
             //populate DB to make the website function
-              return View();
-          }
-        
+            return View();
+        }
+
         public IActionResult aboutus()
         {
             return View();
         }
+
+    
         [HttpGet]
         public IActionResult carratings()
         {
-            IQueryable<safetyratingsview> topcars=null;
+            IQueryable<safetyratingsview> topcars = null;
             SearchView viewmodel = new SearchView
             {
                 safetyrating = topcars
@@ -419,71 +422,177 @@ namespace assignment4.Controllers
         [HttpPost]
         public IActionResult carratings(int x)
         {
-            IQueryable<safetyratingsview> topcars ;
+            IQueryable<topcarsmodel> topcars1;
+            topcars1 = ((from d in dbContext.Vehicle_Safetyratings
+                       join v in dbContext.Vehicle_Variants on d.VehicleId equals v.VehicleId
+                       join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
+                       join m in dbContext.Vehicle_Models on v.model_id equals m.model_id
+                       join md in dbContext.Vehicle_Makes on v.make_id equals md.make_id
+                       where y.ModelYear == 2021 && d.OverallRating != "Not Rated" && d.OverallSideCrashRating != "Not Rated" && d.OverallFrontCrashRating != "Not Rated"
+                       && d.RolloverRating!="Not Rated" && d.RolloverPossibility!=null && d.RolloverPossibility != "Not Rated"
+                       select new topcarsmodel
+                       {
+                           ModelYear = y.ModelYear,
+                           Make = md.Make,
+                           Model = m.Model,
+                           OverallRating = Int32.Parse((d.OverallRating).Trim()),
+                           OverallFrontRating = Int32.Parse((d.OverallFrontCrashRating).Trim()),
+                           OverallSideRating = Int32.Parse((d.OverallSideCrashRating).Trim()),
+                           RolloverPossibility = Decimal.Parse((d.RolloverPossibility).Trim()),
+                           RolloverRating = Decimal.Parse((d.RolloverRating).Trim())
+                       })
+                         .GroupBy(c => new { c.Make,c.ModelYear,c.Model })
+                                  .Select(group => new topcarsmodel
+                                  {
+                                      ModelYear=group.Key.ModelYear
+                                      ,Model=group.Key.Model
+                                      ,Make=group.Key.Make
+                                      ,OverallRating = (group.Average(f => f.OverallRating))
+                                      ,OverallFrontRating = (group.Average(f => f.OverallFrontRating))
+                                      ,OverallSideRating = (group.Average(f => f.OverallSideRating))
+                                      ,RolloverRating = (group.Average(f => f.RolloverRating))
+                                      ,RolloverPossibility = (group.Average(f => f.RolloverPossibility))
+                                  })
+                                  )
+                   .OrderByDescending(c => c.OverallRating)
+                   .ThenBy(c => c.RolloverPossibility)
+                   .Take(5);
 
-            topcars =( from d in dbContext.Vehicle_Safetyratings
-                                join v in dbContext.Vehicle_Variants on d.VehicleId equals v.VehicleId
-                                join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
-                                join m in dbContext.Vehicle_Models on v.model_id equals m.model_id
-                                join md in dbContext.Vehicle_Makes on v.make_id equals md.make_id
-                                where y.ModelYear==2021 && d.OverallRating!="Not Rated" && d.OverallSideCrashRating!="Not Rated" && d.OverallFrontCrashRating!="Not Rated" 
-                               select new safetyratingsview {
-                                   VehicleId=d.VehicleId,
-                                   OverallRating = d.OverallRating,
-                                   OverallFrontCrashRating = d.OverallFrontCrashRating,
-                                   FrontCrashDriversideRating = d.FrontCrashDriversideRating,
-                                   FrontCrashPassengersideRating = d.FrontCrashPassengersideRating,
-                                   OverallSideCrashRating = d.OverallSideCrashRating,
-                                   SideCrashDriversideRating = d.SideCrashDriversideRating,
-                                   SideCrashPassengersideRating = d.SideCrashPassengersideRating,
-                                   RolloverRating = d.RolloverRating,
-                                   RolloverPossibility = d.RolloverPossibility,
-                                   SidePoleCrashRating = d.SidePoleCrashRating,
-                                   ComplaintsCount = d.ComplaintsCount,
-                                   RecallsCount = d.RecallsCount,
-                                   ModelYear = y.ModelYear,
-                                   Make = md.Make,
-                                   Model = m.Model,
-                                   VehicleDescription = d.VehicleDescription
-                               })
-                               .OrderByDescending(c => c.OverallRating)
-                               .ThenBy(c => c.RolloverPossibility)
-                               .ThenBy(c => c.ComplaintsCount)
-                               .ThenBy(c => c.RecallsCount)
-                               .Take(5);
+            //now for the chart display
+            //for these makes get all their years and overallratings average
+            IQueryable<chartdatafromDB> chartdatasetinitial;
+
+            //now for the top 5 makes distinct i have their avg overall rating for all the years
+            chartdatasetinitial = (from d in dbContext.Vehicle_Safetyratings
+                                   join v in dbContext.Vehicle_Variants on d.VehicleId equals v.VehicleId
+                                   join m in dbContext.Vehicle_Makes on v.make_id equals m.make_id
+                                   join md in dbContext.Vehicle_Models on v.model_id equals md.model_id
+                                   join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
+                                   join xx in topcars1 on m.Make equals xx.Make
+                                   where d.OverallRating != "Not Rated" &&  y.ModelYear >=(2021-5)
+                                   select new chartdatafromDB
+                                   {
+                                      MakeModel=m.Make,
+                                       datafield = Int32.Parse((d.OverallRating).Trim()),
+                                       counts=1
+
+                                   })
+                                  .GroupBy(c => new { c.MakeModel })
+                                  .Select(group => new chartdatafromDB
+                                  {
+                                      datafield = (group.Average(f => f.datafield)),
+                                      MakeModel = group.Key.MakeModel,
+                                      color = "#3cba9f",
+                                      counts=(group.Sum(f=>f.counts))
+                                  })
+                                  .OrderBy(c => c.MakeModel);
+
+
+            //get all makemodels to make labels
+            IQueryable<string> makemodel_all = (from c in chartdatasetinitial
+                                                select c.MakeModel);
+            //make them a string to send for chart 
+            string makemodel = String.Join(",", makemodel_all.Select(d => "'" + d + "'"));
+
+            //get all avgratings to make data
+            IQueryable<decimal> dataall = (from c in chartdatasetinitial
+                                           select c.datafield);
+
+
+            string data = String.Join(",", dataall.Select(d => d));
+
+            //get total number of cars on which avg calculated
+            IQueryable<int> totaltestcarsall = (from c in chartdatasetinitial
+                                           select c.counts);
+
+
+            string totaltestedchart = String.Join(",", totaltestcarsall.Select(d => d));
+
+            //get all colors 
+            IQueryable<string> colorsall = (from c in chartdatasetinitial
+                                            select c.color);
+            //make them a string to send for chart 
+            string colors = String.Join(",", colorsall.Select(d => "'" + d + "'"));
+
+
+
 
 
             SearchView viewmodel = new SearchView
             {
-                safetyrating = topcars
+                topcarsdisplay = topcars1,
+                makemodels = makemodel,
+                data = data,
+                totaltestedchart=totaltestedchart,
+                color = colors
+
             };
             return View(viewmodel);
         }
         [HttpGet]
-        public IActionResult checkyours(int id)
+        public IActionResult checkyours(string yearsearch, string makesearch, string modelsearch)
         {
             //to get a list of all available options
             IEnumerable<int> yearsquery = from m in dbContext.Vehicle_Years
-                                            orderby m.ModelYear
-                                            select m.ModelYear
+                                          orderby m.ModelYear
+                                          select m.ModelYear
                                            ;
             IQueryable<string> makesquery = from m in dbContext.Vehicle_Makes
-                                         orderby m.Make
-                                         select m.Make;
+                                            orderby m.Make
+                                            select m.Make;
             IQueryable<string> modelsquery = from m in dbContext.Vehicle_Models
-                                            orderby m.Model
-                                            select m.Model;
+                                             orderby m.Model
+                                             select m.Model;
             //send as blank at get 
-            IQueryable<safetyratingsview> view_safetyrating=null;
-            //load data in it if its master detail relationship coming from topratings
-            if (id != 0)
+            IQueryable<safetyratingsview> view_safetyrating = null;
+
+            if (yearsearch != null && modelsearch != null && makesearch != null)
             {
+                //filtered years
+                var f_years = from m in dbContext.Vehicle_Years
+                              select m;
+                if (yearsearch != null)
+                {
+                    f_years = from m in f_years
+                              where m.ModelYear == Int32.Parse(yearsearch)
+                              select m;
+                }
+                //filtered makes
+                var f_makes = from m in dbContext.Vehicle_Makes
+                              select m;
+                if (makesearch != null)
+                {
+                    f_makes = from m in f_makes
+                              where m.Make == makesearch
+                              select m;
+                }
+                //filtered models
+                var f_models = from m in dbContext.Vehicle_Models
+                               select m;
+                if (modelsearch != null)
+                {
+                    f_models = from m in f_models
+                               where m.Model == modelsearch
+                               select m;
+                }
+                //filtered vehicle variants
+                var f_variants = from d in dbContext.Vehicle_Variants
+                                 join c in f_years on d.year_id equals c.year_id
+                                 join e in f_makes on d.make_id equals e.make_id
+                                 join f in f_models on d.model_id equals f.model_id
+                                 select new v_variants
+                                 {
+                                     VehicleId = d.VehicleId,
+                                     ModelYear = c.ModelYear,
+                                     Make = e.Make,
+                                     Model = f.Model
+                                 };
+
+                //filter on year,make and model 
+                //details on the asked for vehicle variants (1 - many relationship)
+
                 view_safetyrating = from d in dbContext.Vehicle_Safetyratings
-                                    join v in dbContext.Vehicle_Variants on d.VehicleId equals v.VehicleId
-                                    join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
-                                    join m in dbContext.Vehicle_Models on v.model_id equals m.model_id
-                                    join md in dbContext.Vehicle_Makes on v.make_id equals md.make_id
-                                    where d.VehicleId == id
+                                    join c in f_variants on d.VehicleId equals c.VehicleId
                                     select new safetyratingsview
                                     {
                                         OverallRating = d.OverallRating,
@@ -498,11 +607,12 @@ namespace assignment4.Controllers
                                         SidePoleCrashRating = d.SidePoleCrashRating,
                                         ComplaintsCount = d.ComplaintsCount,
                                         RecallsCount = d.RecallsCount,
-                                        ModelYear = y.ModelYear,
-                                        Make = md.Make,
-                                        Model = m.Model,
+                                        ModelYear = c.ModelYear,
+                                        Make = c.Make,
+                                        Model = c.Model,
                                         VehicleDescription = d.VehicleDescription
                                     };
+
             }
             //to load comments on the page
             IQueryable<usercommentdetails> viewcommentdetails;
@@ -510,7 +620,7 @@ namespace assignment4.Controllers
             viewcommentdetails = from d in dbContext.UserReviews
                                  select new usercommentdetails
                                  {
-                                     Id=d.Id,
+                                     Id = d.Id,
                                      name = d.name,
                                      email = d.email,
                                      comments = d.comments
@@ -528,7 +638,7 @@ namespace assignment4.Controllers
         }
 
         [HttpPost]
-        public IActionResult checkyours(string yearsearch, string makesearch, string modelsearch,string name, string email, string comments)
+        public IActionResult checkyours(string yearsearch, string makesearch, string modelsearch, string name, string email, string comments)
         {
             IEnumerable<int> yearsquery = from m in dbContext.Vehicle_Years
                                           orderby m.ModelYear
@@ -563,7 +673,7 @@ namespace assignment4.Controllers
             //filtered models
             var f_models = from m in dbContext.Vehicle_Models
                            select m;
-            if (modelsearch!="All Models")
+            if (modelsearch != "All Models")
             {
                 f_models = from m in f_models
                            where m.Model == modelsearch
@@ -576,11 +686,11 @@ namespace assignment4.Controllers
                              join f in f_models on d.model_id equals f.model_id
                              select new v_variants
                              {
-                                 VehicleId=d.VehicleId,
+                                 VehicleId = d.VehicleId,
                                  ModelYear = c.ModelYear,
                                  Make = e.Make,
                                  Model = f.Model
-                                 };
+                             };
 
             //filter on year,make and model 
             //details on the asked for vehicle variants (1 - many relationship)
@@ -614,11 +724,11 @@ namespace assignment4.Controllers
                                  select new usercommentdetails
                                  {
                                      Id = d.Id,
-                                 name = d.name,
-                                 email = d.email,
-                                 comments = d.comments
+                                     name = d.name,
+                                     email = d.email,
+                                     comments = d.comments
 
-                             };
+                                 };
             SearchView viewmodel = new SearchView
             {
                 Years = new SelectList(yearsquery.ToList()),
@@ -626,7 +736,7 @@ namespace assignment4.Controllers
                 Models = new SelectList(modelsquery.ToList()),
 
                 safetyrating = view_safetyrating,
-                commentdetails=viewcommentdetails
+                commentdetails = viewcommentdetails
             };
             return View(viewmodel);
         }
@@ -654,7 +764,7 @@ namespace assignment4.Controllers
             ViewBag.dbSuccessComp = 1;
         }
         //Create for CRUD
-        public ActionResult AddComment(string name, string email, string comments,int id)
+        public ActionResult AddComment(string name, string email, string comments, int id)
         {
             if (id == 0)
             {
@@ -664,7 +774,7 @@ namespace assignment4.Controllers
             {
                 UpdateComment(name, email, comments, id);
             }
-            return RedirectToAction("checkyours","Home");
+            return RedirectToAction("checkyours", "Home");
         }
 
         //Updatefor CRUD
@@ -693,5 +803,7 @@ namespace assignment4.Controllers
         }
 
 
+
     }
 }
+

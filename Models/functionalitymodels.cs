@@ -12,4 +12,11 @@ namespace assignment4.Models
         public string Make { get; set; }
         public string Model { get; set; }
     }
+    public class chartdatafromDB { 
+   
+    public string MakeModel { get; set; }
+        public decimal datafield { get; set; }
+        public string color { get; set; }
+        public int counts { get; set; }
+    }
 }

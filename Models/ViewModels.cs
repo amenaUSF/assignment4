@@ -11,7 +11,7 @@ namespace assignment4.Models
     public class SearchView
     {
         //list to display options in the view for check your car ratings
-        public SelectList Years { get; set; }
+        public SelectList Years { get; set; }  
         public SelectList Makes { get; set; }
         public SelectList Models { get; set; }
         //search strings that will store finalized search values
@@ -21,10 +21,20 @@ namespace assignment4.Models
         //final model with complete vehicle info 
         public IQueryable<safetyratingsview> safetyrating { get; set; }
         public int Id { get; set; }
+        //for updating comments
         public string name { get; set; }
         public string email { get; set; }
         public string comments { get; set; }
+        //for displaying comments
         public IQueryable<usercommentdetails> commentdetails { get; set; }
+        //for finding and displaying top 5 cars
+        public IQueryable<topcarsmodel> topcarsdisplay { get; set; }
+        //for the chart
+        public string makemodels { get; set; } //for labels
+        public string data { get; set; }//the data
+        public string color { get; set; }//the colors
+        public string totaltestedchart { get; set; }
+
     }
 
     public class safetyratingsview
@@ -57,5 +67,21 @@ namespace assignment4.Models
         [Required(ErrorMessage = "Please comment something")]
         public string comments;
     }
+
+    //for top cars
+    public class topcarsmodel
+    {
+        public int ModelYear { get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
+        public decimal OverallRating { get; set; }
+        public decimal OverallFrontRating { get; set; }
+        public decimal OverallSideRating { get; set; }
+        public decimal RolloverRating { get; set; }
+        public decimal RolloverPossibility { get; set; }
+
+
+    }
+
 
 }

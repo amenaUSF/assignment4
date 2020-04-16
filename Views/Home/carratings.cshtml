@@ -6,70 +6,155 @@
 }
 
 
-    <div class="checkyours">
-        <!--displaying the top 5 cars of the year here -->
-        <h1 class="container">The Top 5 Safe Cars for the Year</h1>
-        <form asp-controller="Home" asp-action="carratings" method="post">
-            <div class="container" style="padding-bottom:6vw">
-                <i class="fas fa-trophy" type="submit" style="color:gold; font-size:6vw; margin-left:46vw; padding-bottom:1vw"></i>
-            </div>
-            <input type="submit" value="Click Me to View" style="color:white; margin-left:46vw; padding-top:2vw; padding-bottom :2vw; font-size:1vw; border:none; cursor:pointer">
-        </form>
+<div class="checkyours">
+    <!--displaying the top 5 cars of the year here -->
+    <h1 class="container">The Top 5 Safe Cars for the Year</h1>
+    <form asp-controller="Home" asp-action="carratings" method="post">
+        <div class="container" style="padding-bottom:6vw">
+            <i class="fas fa-trophy" type="submit" style="color:gold; font-size:6vw; margin-left:46vw; padding-bottom:1vw"></i>
         </div>
+        <input type="submit" value="Click Me to View" style="color:white; margin-left:46vw; padding-top:2vw; padding-bottom :2vw; font-size:1vw; border:none; cursor:pointer">
+    </form>
+</div>
 
-            <!--output display table-->
-            <div style="overflow-x:auto; padding:0vw 13vw 0vw 13vw;">
-                <table class="searchtable">
+<!--output display table-->
+<div style="overflow-x:auto; padding:0vw 13vw 0vw 13vw;">
+    <table class="searchtable">
+        <tr>
+            <th>Model Year</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Overall</th>
+            <th>Overall Front</th>
+            <th>Overall Side</th>
+            <th>Rollover</th>
+            <th>Rollover Possibility</th>
+        </tr>
+        <tbody>
+            @if (Model.topcarsdisplay != null)
+            {
+                @foreach (var item in Model.topcarsdisplay)
+                {
                     <tr>
-                        <th>Model Year</th>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Overall</th>
-                        <th>Overall Front</th>
-                        <th>Overall Side</th>
-                        <th>Rollover</th>
-                        <th>Rollover Possibility</th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ModelYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Make)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OverallRating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OverallFrontRating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OverallSideRating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RolloverRating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RolloverPossibility)
+                        </td>
+                        <td style="background-color:black !important">
+                            <a href="@Url.Action("checkyours",new { yearsearch=item.ModelYear,makesearch=item.Make,modelsearch=item.Model})" style="cursor: pointer; background:none; color:red; width: 5vw;font-size: 2vw;padding: 0vw 0vw 0vw 0vw ;">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                        </td>
                     </tr>
-                    <tbody>
-                        @if (Model.safetyrating != null)
-                        {
-                            @foreach (var item in Model.safetyrating)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ModelYear)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Make)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Model)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OverallRating)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OverallFrontCrashRating)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.OverallSideCrashRating)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.RolloverRating)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.RolloverPossibility)
-                                    </td>
-                                    <td style="background-color:black !important">
-                                        <a href="@Url.Action("checkyours",new { id=item.VehicleId})" style="cursor: pointer; background:none; color:red; width: 5vw;font-size: 2vw;padding: 0vw 0vw 0vw 0vw ;">
-                                            <i class="fas fa-info-circle"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        }
+                }
+            }
 
-                    </tbody>
-                </table>
-            </div>
-    
+        </tbody>
+    </table>
+</div>
+
+//chart area for avg rating
+<div style="padding:0vw 13vw 5vw 13vw">
+    <canvas id="myChart" style="width:80%;height:140%; border-color:white"></canvas>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script>
+ new Chart(document.getElementById("myChart"),
+        {
+            type: 'bar',
+      data: {
+        labels: [@Html.Raw(@Model.makemodels)],
+          datasets: [
+
+          {
+                  label: "Avg Rating",
+              backgroundColor: [@Html.Raw(@Model.color)],
+            data: [@Model.data]
+          }
+        ]
+      },
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true,
+                            max: 5,
+                            min: 0
+                        }
+                    }]
+                },
+              legend: { display: false },
+              title: {
+                  display: true,
+                  text: 'Avg Rating for the Top Makers (over the last 5 years)'
+              }
+          }
+    });
+</script>
+
+//chart area for total tested cars
+<div style="padding:0vw 13vw 5vw 13vw">
+    <canvas id="totaltestedchart" style="width:80%;height:140%; border-color:white"></canvas>
+
+</div>
+
+<script>
+    new Chart(document.getElementById("totaltestedchart"),
+        {
+            type: 'bar',
+      data: {
+        labels: [@Html.Raw(@Model.makemodels)],
+          datasets: [
+
+          {
+                  label: "Total tested Cars",
+              backgroundColor: [@Html.Raw(@Model.color)],
+            data: [@Model.totaltestedchart]
+          }
+        ]
+      },
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0
+                        }
+                    }]
+                },
+              legend: { display: false },
+              title: {
+                  display: true,
+                  text: 'Total Tested Cars for the Top Makers (over the last 5 years)'
+              }
+          }
+    });
+</script>
+
+
