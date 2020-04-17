@@ -640,15 +640,6 @@ namespace assignment4.Controllers
         [HttpPost]
         public IActionResult checkyours(string yearsearch, string makesearch, string modelsearch, string name, string email, string comments)
         {
-            IEnumerable<int> yearsquery = from m in dbContext.Vehicle_Years
-                                          orderby m.ModelYear
-                                          select m.ModelYear;
-            IQueryable<string> makesquery = from m in dbContext.Vehicle_Makes
-                                            orderby m.Make
-                                            select m.Make;
-            IQueryable<string> modelsquery = from m in dbContext.Vehicle_Models
-                                             orderby m.Model
-                                             select m.Model;
 
             //var to store filtered results in and transfer to the model
             IQueryable<safetyratingsview> view_safetyrating;
@@ -691,6 +682,20 @@ namespace assignment4.Controllers
                                  Make = e.Make,
                                  Model = f.Model
                              };
+
+            //filter the search functions accordingly
+                IEnumerable<int> yearsquery= (from m in f_variants
+                                             orderby m.ModelYear
+                                             select m.ModelYear
+                                             ).Distinct();
+            IQueryable<string> makesquery = (from m in f_variants
+                                            orderby m.Make
+                                            select m.Make
+                                            ).Distinct();
+            IQueryable<string> modelsquery = (from m in f_variants
+                                             orderby m.Model
+                                             select m.Model
+                                             ).Distinct();
 
             //filter on year,make and model 
             //details on the asked for vehicle variants (1 - many relationship)
