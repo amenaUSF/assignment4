@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 // This directive comes from the DataAccess directory
 // that stores the Context or the database
 using assignment4.data_access_folder;
@@ -39,20 +35,8 @@ namespace assignment4
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // Setup EF connection - modify the Configuration string
-            //          services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration["Data:assignment4_API_DB:ConnectionString"]));
-            //replace the above with this for deployement in azure 
-            // Use SQL Database if in Azure, otherwise, use SQLite
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-                services.AddDbContext<ApplicationDBContext>(options =>
-                        options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
-            else
-                services.AddDbContext<ApplicationDBContext>(options =>
-                        options.UseSqlServer("Data Source=localdatabase.db"));
-
-            // Automatically perform database migration
-            services.BuildServiceProvider().GetService<ApplicationDBContext>().Database.Migrate();
-            
-        }
+                   services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration["Data:ConnectionString"]));
+       }
 
 
 

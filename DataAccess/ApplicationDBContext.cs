@@ -11,6 +11,7 @@ namespace assignment4.data_access_folder
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { }
 
+
         //tables to get data from the api since our api requires too many sequential hits, we grabbed data over different sessions
         public DbSet<v_year> years { get; set; }
         public DbSet<v_make> makes { get; set; }

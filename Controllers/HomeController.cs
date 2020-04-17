@@ -15,6 +15,7 @@ namespace assignment4.Controllers
 {
     public class HomeController : Controller
     {
+    
         public ApplicationDBContext dbContext; //for connection to the db
         static string BASE_URL = "https://webapi.nhtsa.gov/api/SafetyRatings";        //base url returns all the years
 
