@@ -39,10 +39,10 @@ namespace assignment4
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // Setup EF connection - modify the Configuration string
-            //            services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration["Data:assignment4_API_DB:ConnectionString"]));
+            //          services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration["Data:assignment4_API_DB:ConnectionString"]));
             //replace the above with this for deployement in azure 
             // Use SQL Database if in Azure, otherwise, use SQLite
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
                 services.AddDbContext<ApplicationDBContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
             else
@@ -51,7 +51,7 @@ namespace assignment4
 
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<ApplicationDBContext>().Database.Migrate();
-
+            
         }
 
 

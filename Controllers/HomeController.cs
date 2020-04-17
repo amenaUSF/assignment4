@@ -428,7 +428,7 @@ namespace assignment4.Controllers
                        join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
                        join m in dbContext.Vehicle_Models on v.model_id equals m.model_id
                        join md in dbContext.Vehicle_Makes on v.make_id equals md.make_id
-                       where y.ModelYear == 2021 && d.OverallRating != "Not Rated" && d.OverallSideCrashRating != "Not Rated" && d.OverallFrontCrashRating != "Not Rated"
+                       where y.ModelYear == 2020 && d.OverallRating != "Not Rated" && d.OverallSideCrashRating != "Not Rated" && d.OverallFrontCrashRating != "Not Rated"
                        && d.RolloverRating!="Not Rated" && d.RolloverPossibility!=null && d.RolloverPossibility != "Not Rated"
                        select new topcarsmodel
                        {
@@ -469,7 +469,7 @@ namespace assignment4.Controllers
                                    join md in dbContext.Vehicle_Models on v.model_id equals md.model_id
                                    join y in dbContext.Vehicle_Years on v.year_id equals y.year_id
                                    join xx in topcars1 on m.Make equals xx.Make
-                                   where d.OverallRating != "Not Rated" &&  y.ModelYear >=(2021-5)
+                                   where d.OverallRating != "Not Rated" &&  y.ModelYear >=(2020-5)
                                    select new chartdatafromDB
                                    {
                                       MakeModel=m.Make,
