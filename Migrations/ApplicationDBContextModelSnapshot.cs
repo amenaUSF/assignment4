@@ -225,6 +225,22 @@ namespace assignment4.Migrations
                     b.ToTable("Vehicle_Years");
                 });
 
+            modelBuilder.Entity("assignment4.Models.usercomments", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<string>("name");
+                b.Property<string>("email");
+                b.Property<string>("comments");
+
+                b.HasKey("Id");
+
+                b.ToTable("UserReviews");
+            });
+
+
             modelBuilder.Entity("assignment4.Models.safetyratings", b =>
                 {
                     b.HasOne("assignment4.Models.v_make", "makes")

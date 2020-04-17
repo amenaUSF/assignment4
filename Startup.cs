@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 // This directive comes from the DataAccess directory
 // that stores the Context or the database
 using assignment4.data_access_folder;
@@ -31,11 +30,11 @@ namespace assignment4
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // Setup EF connection - modify the Configuration string
-                   services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration["Data:ConnectionString"]));
+                   services.AddDbContext<ApplicationDBContext>(options =>
+            options.UseSqlServer(Configuration["Data:ConnectionStrings:azuredatabase"]));
+
        }
 
 

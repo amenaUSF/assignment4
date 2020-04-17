@@ -103,6 +103,23 @@ namespace assignment4.Migrations
                 });
 
             migrationBuilder.CreateTable(
+    name: "UserReviews",
+    columns: table => new
+    {
+        Id = table.Column<int>(nullable: false)
+            .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+        name = table.Column<string>(nullable: false),
+        email = table.Column<string>(nullable: false),
+        comments = table.Column<string>(nullable: false)
+
+    },
+    constraints: table =>
+    {
+        table.PrimaryKey("PK_UserReviews", x => x.Id);
+    });
+
+
+            migrationBuilder.CreateTable(
                 name: "Vehicle_Safetyratings",
                 columns: table => new
                 {
